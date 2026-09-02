@@ -240,6 +240,10 @@
     <div class="products__state" id="products-state">Loading products…</div>
   </div>
 
+  <div class="products__footer" id="products-footer" style="display: none;">
+    <button class="products__load-more" id="products-load-more">Load More</button>
+  </div>
+
 </section>
 
 <script>
@@ -310,7 +314,10 @@
           ${inStock ? 'In Stock' : 'Out of Stock'}
         </span>
         <p class="product-card__name">${p.title.split('|')[0].split('–')[0].trim()}</p>
-        <p class="product-card__desc">${p.description ? p.description : makeDesc(p.title)}</p>
+        <div class="product-card__desc-wrap">
+          <p class="product-card__desc">${p.description ? p.description : makeDesc(p.title)}</p>
+          <button class="product-card__read-more is-hidden" aria-expanded="false">Read More</button>
+        </div>
         <div class="product-card__price-row">
           <span class="product-card__price">${aedPrice.toLocaleString()}<span class="product-card__price-currency"> AED</span></span>
           ${aedOldPrice && aedOldPrice !== aedPrice
@@ -349,18 +356,69 @@
   /* ——— Search & Rendering Logic ——————————————————————————— */
   let allProducts = [];
   
-  function renderProducts(items) {
+  let currentFilter = [];
+  let currentVisibleCount = 0;
+  const ITEMS_PER_PAGE = 6;
+  
+  function initReadMore(cards) {
+    cards.forEach(card => {
+      const desc = card.querySelector('.product-card__desc');
+      const btn = card.querySelector('.product-card__read-more');
+      if (!desc || !btn) return;
+      
+      requestAnimationFrame(() => {
+        // Allow a tiny tolerance for sub-pixel rendering differences
+        if (desc.scrollHeight > desc.clientHeight + 2) {
+          btn.classList.remove('is-hidden');
+          btn.addEventListener('click', () => {
+            const isExpanded = desc.classList.toggle('is-expanded');
+            btn.textContent = isExpanded ? 'Show Less' : 'Read More';
+            btn.setAttribute('aria-expanded', isExpanded);
+          });
+        }
+      });
+    });
+  }
+
+  function renderProducts(items, append = false) {
     const grid = document.getElementById('products-grid');
-    grid.innerHTML = '';
+    const footer = document.getElementById('products-footer');
     
-    if (items.length === 0) {
+    if (!append) {
+      grid.innerHTML = '';
+      currentFilter = items;
+      currentVisibleCount = 0;
+    }
+    
+    if (currentFilter.length === 0) {
       grid.innerHTML = '<div class="products__state">No products found matching your search.</div>';
+      footer.style.display = 'none';
       return;
     }
     
-    const cards = items.map(buildCard);
+    const nextSet = currentFilter.slice(currentVisibleCount, currentVisibleCount + ITEMS_PER_PAGE);
+    
+    const cards = nextSet.map(buildCard);
     cards.forEach(c => grid.appendChild(c));
+    initReadMore(cards);
     requestAnimationFrame(() => observeCards(cards));
+    
+    currentVisibleCount += nextSet.length;
+    
+    if (currentVisibleCount >= currentFilter.length) {
+      footer.style.display = 'none';
+    } else {
+      footer.style.display = 'flex';
+    }
+  }
+
+  function setupPagination() {
+    const btn = document.getElementById('products-load-more');
+    if (btn) {
+      btn.addEventListener('click', () => {
+        renderProducts(currentFilter, true);
+      });
+    }
   }
 
   function setupSearch() {
@@ -408,6 +466,7 @@
       if (!allProducts || allProducts.length === 0) throw new Error('No products found');
 
       setupSearch();
+      setupPagination();
       renderProducts(allProducts);
 
       /* Inject Schema.org JSON-LD for products */
