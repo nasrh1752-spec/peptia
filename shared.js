@@ -8,14 +8,30 @@ window.Peptia = (function () {
   'use strict';
 
   // Constants
-  const STORE_KEY  = 'peptia_products';
+  const PRODUCTS_DATA_VERSION = "1";
+  const STORE_KEY  = 'peptia_products_v' + PRODUCTS_DATA_VERSION;
   const WA_KEY     = 'whatsappNumber';
   const WA_DEFAULT = '201095673317';
-  const DATA_URL   = 'retatrutide_products.json';
+  const DATA_URL   = `retatrutide_products.json?v=${PRODUCTS_DATA_VERSION}`;
   const SAR_TO_AED = 0.98;
+
+  // Clean up old local storage caches
+  try {
+    const keysToRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('peptia_products') && key !== STORE_KEY) {
+        keysToRemove.push(key);
+      }
+    }
+    keysToRemove.forEach(k => localStorage.removeItem(k));
+  } catch (e) {
+    console.error('[PEPTIA] Cache cleanup error', e);
+  }
 
   // State
   let products = [];
+  let isFetching = null;
 
   // Utilities
   function toAED(sar) {
@@ -61,6 +77,8 @@ window.Peptia = (function () {
 
   // Data Loading
   async function loadProducts() {
+    if (products.length > 0) return products;
+
     const cached = localStorage.getItem(STORE_KEY);
     if (cached) {
       try {
@@ -71,18 +89,28 @@ window.Peptia = (function () {
       }
     }
     
-    // Fallback: Fetch JSON
-    try {
-      const res = await fetch(DATA_URL);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      products = data.products || [];
-      saveProducts(products); // cache it
-      return products;
-    } catch (e) {
-      console.error('[PEPTIA] Error loading initial data:', e);
-      return [];
+    if (isFetching) {
+      return await isFetching;
     }
+
+    isFetching = (async () => {
+      // Fallback: Fetch JSON
+      try {
+        const res = await fetch(DATA_URL);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        products = data.products || [];
+        saveProducts(products); // cache it
+        return products;
+      } catch (e) {
+        console.error('[PEPTIA] Error loading initial data:', e);
+        return [];
+      } finally {
+        isFetching = null;
+      }
+    })();
+
+    return await isFetching;
   }
 
   function saveProducts(newProducts) {
@@ -97,7 +125,8 @@ window.Peptia = (function () {
   return {
     constants: {
       WA_DEFAULT,
-      DATA_URL
+      DATA_URL,
+      STORE_KEY
     },
     toAED,
     toSAR,

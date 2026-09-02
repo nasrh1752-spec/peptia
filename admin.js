@@ -209,8 +209,8 @@
   'use strict';
 
   /* ━━━━ 1. CONFIG & STATE ━━━━━━━━━━━━━━━━━━━━━━━━━ */
-  const STORE_KEY = 'peptia_products';
-  const DATA_URL  = 'retatrutide_products.json'; // relative to site root
+  const STORE_KEY = Peptia.constants.STORE_KEY || 'peptia_products';
+  const DATA_URL  = Peptia.constants.DATA_URL || 'retatrutide_products.json'; // relative to site root
   let products = [];
   let currentEditId = null;
 
@@ -257,23 +257,8 @@
 
   /* ━━━━ 4. DATA INIT ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
   async function initData() {
-    const cached = localStorage.getItem(STORE_KEY);
-    if (cached) {
-      try {
-        products = JSON.parse(cached);
-        render();
-        return;
-      } catch (e) {
-        console.error('Failed to parse localStorage products', e);
-      }
-    }
-    
-    // Fallback: Fetch JSON
     try {
-      const res = await fetch(DATA_URL);
-      const data = await res.json();
-      products = data.products || [];
-      saveData();
+      products = await Peptia.loadProducts();
       render();
     } catch (e) {
       Peptia.showToast('Error loading initial data', 'error');
@@ -281,7 +266,7 @@
   }
 
   function saveData() {
-    localStorage.setItem(STORE_KEY, JSON.stringify(products));
+    Peptia.saveProducts(products);
     updateStats();
   }
 

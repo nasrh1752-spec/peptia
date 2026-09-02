@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Barlow+Condensed:wght@700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="animations.css" />
+  <script src="shared.js"></script>
 </head>
 <body>
 
@@ -332,18 +333,7 @@
     const grid  = document.getElementById('products-grid');
     const state = document.getElementById('products-state');
     try {
-      let products = [];
-      const cached = localStorage.getItem('peptia_products');
-      
-      if (cached) {
-        products = JSON.parse(cached);
-      } else {
-        const res  = await fetch('../retatrutide_products.json');
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        products = data.products || [];
-        localStorage.setItem('peptia_products', JSON.stringify(products));
-      }
+      const products = await Peptia.loadProducts();
 
       if (!products || products.length === 0) throw new Error('No products found');
 
@@ -354,7 +344,7 @@
       /* slight delay so DOM paint completes before observing */
       requestAnimationFrame(() => observeCards(cards));
     } catch (err) {
-      state.textContent = 'Could not load products. Please try again later.';
+      if (state) state.textContent = 'Could not load products. Please try again later.';
       console.error('[PEPTIA] Product load error:', err);
     }
   }
@@ -738,7 +728,6 @@
   </svg>
 </button>
 
-<script src="shared.js"></script>
 <script src="script.js" defer></script>
 
 </body>
