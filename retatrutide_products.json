@@ -1,84 +1,8 @@
 {
-  "source": "Expanded catalog from user-provided sites; prices >= 900 and stock set available per user request",
+  "source": "Admin Dashboard Export",
   "currency": "SAR",
-  "product_count": 726,
+  "product_count": 722,
   "products": [
-    {
-      "product_id": "387749679",
-      "title": "Retatrutide ZPHC 60 mg – ريتاتروتايد 60 ملجم",
-      "image_url": "https://cdn.salla.sa/NKygBY/e2a755c6-0217-4d08-b098-d68dcfae294e-500x333.33333333333-h4zWb3wY1xZN05xjkqYl56P9g9z5Km4Ky4LLM1Uj.png",
-      "product_url": "https://safit2020.com/ar/retatrutide-zphc-60-mg-ريتاتروتايد-60-ملجم/p387749679",
-      "current_price_sar": "2450",
-      "old_price_sar": "2600",
-      "discount_percent": "6",
-      "availability": "متوفر",
-      "card_text": "RETA 60mg Retatrutide ZPHC 60 mg – ريتاتروتايد 60 ملجم 2450 2600 2450 خصم 6% أضف إلى السلة أضف إلى السلة",
-      "source_category_url": "https://safit2020.com/ar/Retatrutide/c1774293320",
-      "detail": {
-        "http_status": 403,
-        "meta_description": "",
-        "price_source": "source",
-        "stock_source": "user_requested_override"
-      },
-      "local_image_file": "01_387749679.png"
-    },
-    {
-      "product_id": "1083225670",
-      "title": "RETATRUTIDE 20 mg Kit | ريتاتويد 20 مج",
-      "image_url": "https://cdn.salla.sa/NKygBY/21ff4f4e-f96b-485b-977f-0544254b4b8e-500x375-rR49uat1jfcuaojJQpVZiIapHWDZRODaqaP3vsz7.png",
-      "product_url": "https://safit2020.com/ar/retatrutide-20-mg-kit-ريتاتويد-20-مج/p1083225670",
-      "current_price_sar": "1350",
-      "old_price_sar": "1500",
-      "discount_percent": "10",
-      "availability": "متوفر",
-      "card_text": "RETATRUTIDE 20 mg Kit | ريتاتويد 20 مج 1350 1500 1350 خصم 10% أضف إلى السلة أضف إلى السلة",
-      "source_category_url": "https://safit2020.com/ar/Retatrutide/c1774293320",
-      "detail": {
-        "http_status": 403,
-        "meta_description": "",
-        "price_source": "source",
-        "stock_source": "user_requested_override"
-      },
-      "local_image_file": "02_1083225670.png"
-    },
-    {
-      "product_id": "1150737562",
-      "title": "Retatrutide 60mg Kit – 3×20mg Vials | مجموعة رياتويد مع ماء بكتيري",
-      "image_url": "https://cdn.salla.sa/NKygBY/41a6daa8-1e5d-404a-8554-ba84c4f86a26-500x500-QcNQ8xnNhhXv6cEmHlSobPdYHcVAF8Pk18epP8vs.png",
-      "product_url": "https://safit2020.com/ar/retatrutide-60mg-kit-3-20mg-vials-مجموعة-رياتويد-مع-ماء-بكتيري/p1150737562",
-      "current_price_sar": "1950",
-      "old_price_sar": "2150",
-      "discount_percent": "9",
-      "availability": "متوفر",
-      "card_text": "Retatrutide 60mg Kit – 3×20mg Vials | مجموعة رياتويد مع ماء بكتيري 1950 2150 1950 خصم 9% أضف إلى السلة أضف إلى السلة",
-      "source_category_url": "https://safit2020.com/ar/Retatrutide/c1774293320",
-      "detail": {
-        "http_status": 403,
-        "meta_description": "",
-        "price_source": "source",
-        "stock_source": "user_requested_override"
-      },
-      "local_image_file": "03_1150737562.png"
-    },
-    {
-      "product_id": "1844813407",
-      "title": "Reta ZPHC 30mg pin قلم ريتاتويد 30 مج",
-      "image_url": "https://cdn.salla.sa/NKygBY/89f7d44f-d526-4dde-a57a-e5093e672052-500x500-rnMDkuoZiXM2DFyDJPKzOq9YQm5gIBZl2xludqwz.jpg",
-      "product_url": "https://safit2020.com/ar/reta-zphc-aq-pen-30mg/p1844813407",
-      "current_price_sar": "1650",
-      "old_price_sar": "1900",
-      "discount_percent": "13",
-      "availability": "متوفر",
-      "card_text": "Reta 30mg Pin Reta ZPHC 30mg pin قلم ريتاتويد 30 مج 1650 1900 1650 خصم 13% أضف إلى السلة أضف إلى السلة",
-      "source_category_url": "https://safit2020.com/ar/Retatrutide/c1774293320",
-      "detail": {
-        "http_status": 403,
-        "meta_description": "",
-        "price_source": "source",
-        "stock_source": "user_requested_override"
-      },
-      "local_image_file": "04_1844813407.jpg"
-    },
     {
       "product_id": "648210109",
       "title": "RETATRUTIDE 40MG Kit | كرتون ريتاتويد 40 مج 5 فايلات",
