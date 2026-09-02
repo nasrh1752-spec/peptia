@@ -8,7 +8,7 @@ window.Peptia = (function () {
   'use strict';
 
   // Constants
-  const PRODUCTS_DATA_VERSION = "1";
+  const PRODUCTS_DATA_VERSION = "2";
   const STORE_KEY  = 'peptia_products_v' + PRODUCTS_DATA_VERSION;
   const WA_KEY     = 'whatsappNumber';
   const WA_DEFAULT = '201095673317';
