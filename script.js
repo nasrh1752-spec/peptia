@@ -123,7 +123,7 @@
 
   function intentGreet() {
     return `Hey! 👋 Great to have you here.<br>
-I'm the <strong>PEPTIA</strong> assistant — ask me about products, prices, stock, or how to order.`;
+I'm the <strong>PEPTIA</strong> assistant — ask me about our peptide products in Dubai, prices, stock, or how to order.`;
   }
 
   function intentThanks() {
@@ -169,7 +169,7 @@ I'm the <strong>PEPTIA</strong> assistant — ask me about products, prices, sto
   <li>Browse and choose your product</li>
   <li>Click the WhatsApp button on the card</li>
   <li>Confirm details with our team</li>
-  <li>Receive your order 🚀</li>
+  <li>Receive your order anywhere in the UAE 🚀</li>
 </ol><br>${btnWA('Hello PEPTIA, I need help with an order.')}`;
   }
 

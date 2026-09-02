@@ -3,8 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PEPTIA â€” Engineered for Performance</title>
-  <meta name="description" content="PEPTIA â€” Performance-focused products for athletes who take their training seriously." />
+  <title>PEPTIA | Performance & Peptide Products in Dubai, UAE</title>
+  <meta name="description" content="Explore PEPTIA performance and peptide-related products in Dubai and the UAE. Browse product details, prices, specifications and availability with convenient ordering and delivery options." />
+  <meta property="og:title" content="PEPTIA | Performance & Peptide Products in Dubai, UAE" />
+  <meta property="og:description" content="Explore PEPTIA performance and peptide-related products in Dubai and the UAE. Browse product details, prices, specifications and availability with convenient ordering and delivery options." />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="en_AE" />
+  <meta property="og:url" content="https://peptia.com/" />
+  <meta property="og:image" content="https://peptia.com/peptia_hero_product_1787787017282.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="PEPTIA | Performance & Peptide Products in Dubai, UAE" />
+  <meta name="twitter:description" content="Explore PEPTIA performance and peptide-related products in Dubai and the UAE. Browse product details, prices, specifications and availability with convenient ordering and delivery options." />
+  <meta name="twitter:image" content="https://peptia.com/peptia_hero_product_1787787017282.png" />
+  <link rel="canonical" href="https://peptia.com/" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Barlow+Condensed:wght@700;800;900&display=swap" rel="stylesheet" />
@@ -137,17 +148,17 @@
 
     <div class="hero__label" aria-hidden="true">
       <span class="hero__label-line"></span>
-      <span class="hero__label-text">Performance Nutrition</span>
+      <span class="hero__label-text">Performance Nutrition UAE</span>
     </div>
 
-    <h1 class="hero__brand">PEPTIA</h1>
+    <div class="hero__brand" aria-label="PEPTIA">PEPTIA</div>
 
     <div class="hero__divider" aria-hidden="true"></div>
 
-    <p class="hero__headline">Engineered for<br>Performance.</p>
+    <h1 class="hero__headline">Engineered for<br>Performance in Dubai.</h1>
 
     <p class="hero__desc">
-      Performance-focused products for athletes who take their training seriously.
+      Performance-focused peptide products for athletes in the UAE who take their training seriously.
     </p>
 
     <div class="hero__cta-wrap">
@@ -201,8 +212,8 @@
   <div class="tagline__inner">
     <p class="tagline__brand">PEPTIA</p>
     <p class="tagline__copy">
-      Performance-focused products.<br>
-      Made for people who train with purpose.
+      Performance and fitness products.<br>
+      Made for people in the UAE who train with purpose.
     </p>
     <div class="tagline__line" aria-hidden="true"></div>
   </div>
@@ -215,7 +226,14 @@
 
   <div class="products__header">
     <p class="products__label">Our Products</p>
-    <h2 class="products__heading">Choose Your Performance</h2>
+    <h2 class="products__heading">Choose Your Performance Products</h2>
+    <div class="products__search-wrap">
+      <svg class="products__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+      <input type="text" id="products-search" class="products__search-input" placeholder="Search products, categories, or IDs..." aria-label="Search products" />
+      <button class="products__search-clear" id="products-search-clear" aria-label="Clear search" style="display: none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
   </div>
 
   <div class="products__grid" id="products-grid">
@@ -280,7 +298,7 @@
       <div class="product-card__img-wrap">
         <img class="product-card__img"
              src="${imgSrc}"
-             alt="${p.title}"
+             alt="${p.title} - PEPTIA Performance Product Dubai, UAE"
              loading="lazy"
              onerror="this.src='${p.image_url}'" />
         ${hasDiscount ? `<span class="product-card__badge">-${p.discount_percent}%</span>` : ''}
@@ -328,18 +346,99 @@
     cards.forEach(c => io.observe(c));
   }
 
+  /* ——— Search & Rendering Logic ——————————————————————————— */
+  let allProducts = [];
+  
+  function renderProducts(items) {
+    const grid = document.getElementById('products-grid');
+    grid.innerHTML = '';
+    
+    if (items.length === 0) {
+      grid.innerHTML = '<div class="products__state">No products found matching your search.</div>';
+      return;
+    }
+    
+    const cards = items.map(buildCard);
+    cards.forEach(c => grid.appendChild(c));
+    requestAnimationFrame(() => observeCards(cards));
+  }
+
+  function setupSearch() {
+    const searchInput = document.getElementById('products-search');
+    const searchClear = document.getElementById('products-search-clear');
+    
+    if (!searchInput || !searchClear) return;
+
+    function filter() {
+      const q = searchInput.value.trim().toLowerCase();
+      if (!q) {
+        searchClear.style.display = 'none';
+        renderProducts(allProducts);
+        return;
+      }
+      
+      searchClear.style.display = 'flex';
+      const filtered = allProducts.filter(p => {
+        const text = [
+          p.title,
+          p.product_id,
+          p.description ? p.description : makeDesc(p.title),
+          p.source_category_url
+        ].join(' ').toLowerCase();
+        return text.includes(q);
+      });
+      renderProducts(filtered);
+    }
+
+    searchInput.addEventListener('input', filter);
+    searchClear.addEventListener('click', () => {
+      searchInput.value = '';
+      filter();
+      searchInput.focus();
+    });
+  }
+
   /* ——— Load products from JSON ——————————————————————————— */
   async function loadProducts() {
     const grid  = document.getElementById('products-grid');
     const state = document.getElementById('products-state');
     try {
-      const products = await Peptia.loadProducts();
+      allProducts = await Peptia.loadProducts();
 
-      if (!products || products.length === 0) throw new Error('No products found');
+      if (!allProducts || allProducts.length === 0) throw new Error('No products found');
 
-      state.remove();
-      const cards = products.map(buildCard);
-      cards.forEach(c => grid.appendChild(c));
+      setupSearch();
+      renderProducts(allProducts);
+
+      /* Inject Schema.org JSON-LD for products */
+      if (!document.getElementById('schema-products')) {
+        const schema = {
+          "@context": "https://schema.org/",
+          "@type": "ItemList",
+          "itemListElement": allProducts.map((p, i) => ({
+            "@type": "ListItem",
+            "position": i + 1,
+            "item": {
+              "@type": "Product",
+              "name": p.title,
+              "description": p.description ? p.description : p.title,
+              "image": window.location.origin + "/images/" + p.local_image_file,
+              "offers": {
+                "@type": "Offer",
+                "priceCurrency": "AED",
+                "price": Math.round(Number(p.current_price_sar) * SAR_TO_AED),
+                "availability": p.availability === 'متوفر' ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+                "areaServed": "AE"
+              }
+            }
+          }))
+        };
+        const script = document.createElement('script');
+        script.id = 'schema-products';
+        script.type = 'application/ld+json';
+        script.text = JSON.stringify(schema);
+        document.head.appendChild(script);
+      }
 
       /* slight delay so DOM paint completes before observing */
       requestAnimationFrame(() => observeCards(cards));
@@ -359,7 +458,7 @@
 
   <div class="why__header">
     <p class="why__label">Why PEPTIA</p>
-    <h2 class="why__heading">Simple. Clear.<br>Performance-Focused.</h2>
+    <h2 class="why__heading">Simple. Clear.<br>Performance-Focused in the UAE.</h2>
   </div>
 
   <div class="why__grid">
@@ -595,7 +694,7 @@
     <!-- Left — brand -->
     <div class="footer__brand">
       <a href="#hero" class="footer__wordmark" aria-label="PEPTIA — back to top">PEPTIA</a>
-      <span class="footer__tagline">Performance. Simplified.</span>
+      <span class="footer__tagline">Dubai's Choice for Performance Products. Simplified.</span>
     </div>
 
     <!-- Center — nav -->
@@ -625,7 +724,7 @@
 
   <!-- Bottom bar -->
   <div class="footer__bottom">
-    <p class="footer__copy">© 2026 PEPTIA. All rights reserved.</p>
+    <p class="footer__copy">© 2026 PEPTIA Dubai, UAE. All rights reserved.</p>
   </div>
 
 </footer>

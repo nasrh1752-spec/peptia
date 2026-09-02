@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /peptia/
+Allow: /
+Sitemap: https://peptia.com/sitemap.xml
